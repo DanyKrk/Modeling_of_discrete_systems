@@ -20,6 +20,9 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 	private JButton start;
 	private JButton clear;
 	private JComboBox<Integer> drawType;
+	///
+	private JComboBox<String> neigbourhoodType;
+	///
 	private JSlider pred;
 	private JFrame frame;
 	private int iterNum = 0;
@@ -57,9 +60,18 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 		drawType.addActionListener(this);
 		drawType.setActionCommand("drawType");
 
+		///
+		neigbourhoodType = new JComboBox<String>(Board.neighbourhoods);
+		neigbourhoodType.addActionListener(this);
+		neigbourhoodType.setActionCommand("neighbourhoodType");
+		///
+
 		buttonPanel.add(start);
 		buttonPanel.add(clear);
 		buttonPanel.add(drawType);
+		///
+		buttonPanel.add(neigbourhoodType);
+		///
 		buttonPanel.add(pred);
 
 		board = new Board(1024, 768 - buttonPanel.getHeight());
@@ -96,7 +108,19 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 				int newType = (Integer)drawType.getSelectedItem();
 				board.editType = newType;
 			}
-
+			else if (command.equals("neighbourhoodType")){
+				if (running) {
+					timer.stop();
+					start.setText("Start");
+					running = !running;
+				}
+				iterNum = 0;
+				start.setEnabled(true);
+				board.clear();
+				frame.setTitle("Cellular Automata Toolbox");
+				String newNeighbourhoodType = (String)neigbourhoodType.getSelectedItem();
+				board.changeNeigbourhoodType(newNeighbourhoodType);
+			}
 		}
 	}
 
